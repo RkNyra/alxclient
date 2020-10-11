@@ -6,7 +6,6 @@ import {
   Image,
   View,
   Text,
-  ImageBackground,
   useWindowDimensions,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -85,11 +84,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white',
   },
-  customBgImg: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: -10,
-  },
   customProfPic: {
     width: 50,
     height: 50,
@@ -97,10 +91,6 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     alignSelf: 'center',
     marginTop: 10,
-  },
-  customGreeting: {
-    color: 'white',
-    fontSize: 24,
   },
   jokesListView: {
     width: '90%',
@@ -135,13 +125,15 @@ const styles = StyleSheet.create({
   customIcon: {
     width: 27,
     height: 27,
-    marginLeft: 20,
+    marginLeft: 10,
   },
   jokesTextView: {
     flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    alignSelf: 'flex-start',
+	alignSelf: 'flex-start',
+	marginRight: 5,
+    borderRadius: 15,
     backgroundColor: 'white',
   },
   jokesTextTitle: {
