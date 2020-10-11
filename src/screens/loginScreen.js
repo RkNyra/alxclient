@@ -110,7 +110,7 @@ export const LoginScreen = ({navigation}) => {
               marginTop: windowHeight * 0.03,
               marginBottom: windowHeight * 0.03,
             }}>
-            Having trouble loggin in?
+            Not yet registered?
           </Text>
           <Divider style={styles.customDivider} />
 

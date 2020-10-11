@@ -7,7 +7,7 @@ import {
   View,
   Text,
   useWindowDimensions,
-  TouchableOpacity
+  TouchableOpacity,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Layout, Icon, Input, Button, Divider} from '@ui-kitten/components';
@@ -43,7 +43,6 @@ export const RegisterScreen = ({navigation}) => {
     navigation.navigate('Login');
   };
 
-
   return (
     <KeyboardAwareScrollView resetScrollToCoords={{x: 0, y: 0}}>
       <SafeAreaView style={{flex: 1}}>
@@ -60,6 +59,19 @@ export const RegisterScreen = ({navigation}) => {
               source={require('../assets/images/alxlogo.png')}
             />
           </View>
+
+          <Input
+            style={[
+              styles.customInput,
+              {
+                marginHorizontal: windowWidth * 0.1,
+                marginBottom: windowHeight * 0.015,
+              },
+            ]}
+            size="large"
+            placeholder="Username"
+            {...largeInputState}
+          />
           <Input
             style={[
               styles.customInput,
