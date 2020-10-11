@@ -7,6 +7,7 @@ import {
   View,
   Text,
   useWindowDimensions,
+  TouchableOpacity
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Layout, Icon, Input, Button, Divider} from '@ui-kitten/components';
@@ -38,9 +39,10 @@ export const RegisterScreen = ({navigation}) => {
   const mediumInputState = useInputState();
   const largeInputState = useInputState();
 
-  const navigateDetails = () => {
-    navigation.navigate('Home', {screen: 'BtmTabs'});
+  const navigateToLoginScreen = () => {
+    navigation.navigate('Login');
   };
+
 
   return (
     <KeyboardAwareScrollView resetScrollToCoords={{x: 0, y: 0}}>
@@ -95,8 +97,8 @@ export const RegisterScreen = ({navigation}) => {
             <Button
               style={styles.customButton}
               size="large"
-              onPress={navigateDetails}>
-              Log in
+              onPress={navigateToLoginScreen}>
+              Sign up
             </Button>
           </LinearGradient>
 
@@ -109,9 +111,11 @@ export const RegisterScreen = ({navigation}) => {
           </Text>
           <Divider style={styles.customDivider} />
 
-          <Text style={{marginTop: windowHeight * 0.03}}>
-            Proceed to Log in
-          </Text>
+          <TouchableOpacity
+            style={{marginTop: windowHeight * 0.03}}
+            onPress={navigateToLoginScreen}>
+            <Text>Log in</Text>
+          </TouchableOpacity>
         </Layout>
       </SafeAreaView>
     </KeyboardAwareScrollView>
