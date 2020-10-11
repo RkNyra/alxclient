@@ -24,12 +24,13 @@ const BottomTab = () => (
       name="Home"
       component={HomeScreen}
       options={{
+        tabBarLabel: '',
         tabBarIcon: ({color, size}) => (
           <Icon
             color={color}
             size={20}
-            style={{width: 20, height: 20}}
-            fill="#8F9BB3"
+            style={{width: 20, height: 20, marginBottom: '-10%'}}
+            fill="#333"
             name="home"
           />
         ),
@@ -44,7 +45,7 @@ const BottomTab = () => (
           <Icon
             size={20}
             style={{width: 20, height: 20, marginBottom: '-10%'}}
-            fill="#8F9BB3"
+            fill="red"
             name="smiling-face-outline"
           />
         ),
@@ -59,7 +60,7 @@ const BottomTab = () => (
           <Icon
             size={20}
             style={{width: 20, height: 20, marginBottom: '-10%'}}
-            fill="#8F9BB3"
+            fill="blue"
             name="film-outline"
           />
         ),
