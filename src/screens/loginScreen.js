@@ -30,6 +30,8 @@ export const LoginScreen = ({navigation}) => {
 
   const [inputWarningMessage, setInputWarningMessage] = React.useState('');
   const [emailWarnMessage, setEmailWarnMessage] = React.useState('');
+  const [errorWarnMessage, setErrorWarnMessage] = React.useState('');
+
 
   const [secureTextEntry, setSecureTextEntry] = React.useState(true);
 
@@ -88,10 +90,18 @@ export const LoginScreen = ({navigation}) => {
           })
           .then(function (response) {
             console.warn('Logging in User Response: ==========', response);
-            navigateToHomeScreen();
+            console.warn('Logging in User Response.DATA: ==========', response.data);
+            if(response.data.code==204) {
+              // Error: passwords do not match
+              setErrorWarnMessage(<Text>{response.data.error}</Text>);
+
+            } else if(response.data.code==200){
+              // login successful, save data and log in to home-page
+              navigateToHomeScreen();
+            }
           })
           .catch(function (error) {
-            console.warn(error);
+            console.warn(error.error);
           });
       }
     }
@@ -126,6 +136,7 @@ export const LoginScreen = ({navigation}) => {
 
           <Text style={styles.customWarningLabel}>{inputWarningMessage}</Text>
           <Text style={styles.customWarningLabel}>{emailWarnMessage}</Text>
+          <Text style={styles.customWarningLabel}> {errorWarnMessage}</Text>
           <Input
             style={[
               styles.customInput,
