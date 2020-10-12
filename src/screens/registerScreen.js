@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import {serverUrl, registerUserEndpoint} from '../api';
+import {registerUserEndpoint} from '../api';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {
   StyleSheet,
@@ -116,7 +116,7 @@ export const RegisterScreen = ({navigation}) => {
             <Image
               style={{
                 width: windowWidth * 0.7,
-                height: windowHeight * 0.2,
+                height: windowHeight * 0.15,
                 resizeMode: 'contain',
                 marginTop: windowHeight * 0.12,
                 marginBottom: windowHeight * 0.015,

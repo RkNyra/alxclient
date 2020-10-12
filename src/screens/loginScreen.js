@@ -1,4 +1,6 @@
 import React from 'react';
+import axios from 'axios';
+import {loginUserEndpoint} from '../api';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {
   StyleSheet,
@@ -22,11 +24,77 @@ export const LoginScreen = ({navigation}) => {
   const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
 
-  const [value, setValue] = React.useState('');
+  const navigateToHomeScreen = () => {
+    navigation.navigate('Home');
+  };
+
+  const [inputWarningMessage, setInputWarningMessage] = React.useState('');
+  const [emailWarnMessage, setEmailWarnMessage] = React.useState('');
+
   const [secureTextEntry, setSecureTextEntry] = React.useState(true);
 
   const toggleSecureEntry = () => {
     setSecureTextEntry(!secureTextEntry);
+  };
+
+  const useEmailState = (initialValue = '') => {
+    const [email, setEmail] = React.useState(initialValue);
+    return {email, onChangeText: setEmail};
+  };
+  const usePasswordState = (initialValue = '') => {
+    const [password, setPassword] = React.useState(initialValue);
+    return {password, onChangeText: setPassword};
+  };
+
+  const emailInputState = useEmailState();
+  const passwordInputState = usePasswordState();
+
+  const loginUser = () => {
+    // console.warn(
+    //   'Login Screen User Email: ==============',
+    //   emailInputState.email,
+    // );
+
+    const renderInputWarnMessage = () => (
+      <Text>* All fields are required </Text>
+    );
+    const renderEmailWarnMessage = () => (
+      <Text>* Required: example@example.com </Text>
+    );
+    const renderEmptyValue = () => '';
+
+    if (emailInputState.email == '' || passwordInputState.password == '') {
+      setInputWarningMessage(renderInputWarnMessage);
+    } else {
+      let tester = /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-?\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
+      let valid = tester.test(emailInputState.email);
+
+      if (!valid) {
+        setEmailWarnMessage(renderEmailWarnMessage);
+      } else {
+        setInputWarningMessage(renderEmptyValue);
+        setEmailWarnMessage(renderEmptyValue);
+        let userLoginData = {
+          email: emailInputState.email,
+          password: passwordInputState.password,
+        };
+        console.warn('UserLoginData========', userLoginData);
+
+        axios
+          .post(loginUserEndpoint, userLoginData, {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          })
+          .then(function (response) {
+            console.warn('Logging in User Response: ==========', response);
+            navigateToHomeScreen();
+          })
+          .catch(function (error) {
+            console.warn(error);
+          });
+      }
+    }
   };
 
   const renderIcon = (props) => (
@@ -34,12 +102,6 @@ export const LoginScreen = ({navigation}) => {
       <Icon {...props} name={secureTextEntry ? 'eye-off' : 'eye'} />
     </TouchableWithoutFeedback>
   );
-
-  const largeInputState = useInputState();
-
-  const navigateToHomeScreen = () => {
-    navigation.navigate('Home');
-  };
 
   const navigateToRegisterScreen = () => {
     navigation.navigate('Register');
@@ -61,6 +123,9 @@ export const LoginScreen = ({navigation}) => {
               source={require('../assets/images/alxlogo.png')}
             />
           </View>
+
+          <Text style={styles.customWarningLabel}>{inputWarningMessage}</Text>
+          <Text style={styles.customWarningLabel}>{emailWarnMessage}</Text>
           <Input
             style={[
               styles.customInput,
@@ -71,7 +136,7 @@ export const LoginScreen = ({navigation}) => {
             ]}
             size="large"
             placeholder="Email"
-            {...largeInputState}
+            {...emailInputState}
           />
 
           <Input
@@ -83,11 +148,10 @@ export const LoginScreen = ({navigation}) => {
               },
             ]}
             size="large"
-            value={value}
             placeholder="Password"
             accessoryRight={renderIcon}
             secureTextEntry={secureTextEntry}
-            onChangeText={(nextValue) => setValue(nextValue)}
+            {...passwordInputState}
           />
 
           <LinearGradient
@@ -98,7 +162,7 @@ export const LoginScreen = ({navigation}) => {
             <Button
               style={styles.customButton}
               size="large"
-              onPress={navigateToHomeScreen}>
+              onPress={loginUser}>
               Log in
             </Button>
           </LinearGradient>
@@ -129,6 +193,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'transparent',
+  },
+  customWarningLabel: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    width: '75%',
+    color: 'red',
   },
   customInput: {
     borderRadius: 20,
