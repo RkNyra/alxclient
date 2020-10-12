@@ -96,7 +96,7 @@ export const LoginScreen = ({navigation}) => {
               setErrorWarnMessage(<Text>{response.data.error}</Text>);
 
             } else if(response.data.code==200){
-              // login successful, save data and log in to home-page
+              // login successful, save data and log in to home-screen
               navigateToHomeScreen();
             }
           })

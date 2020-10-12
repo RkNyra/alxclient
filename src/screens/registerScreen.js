@@ -25,6 +25,7 @@ export const RegisterScreen = ({navigation}) => {
 
   const [inputWarningMessage, setInputWarningMessage] = React.useState('');
   const [emailWarnMessage, setEmailWarnMessage] = React.useState('');
+  const [errorWarnMessage, setErrorWarnMessage] = React.useState('');
 
   const [secureTextEntry, setSecureTextEntry] = React.useState(true);
 
@@ -89,7 +90,13 @@ export const RegisterScreen = ({navigation}) => {
           })
           .then(function (response) {
             console.warn('Creating User Response: ==========', response);
-            navigateToLoginScreen();
+            if (response.data.code == 400) {
+              // Error: email exists or field is required
+              setErrorWarnMessage(<Text>{response.data.failed}</Text>);
+            } else if (response.data.code == 200) {
+              // register successful, save data and proceed to log-in axewwn
+              navigateToHomeScreen();
+            }
           })
           .catch(function (error) {
             console.warn(error);
@@ -119,13 +126,14 @@ export const RegisterScreen = ({navigation}) => {
                 height: windowHeight * 0.15,
                 resizeMode: 'contain',
                 marginTop: windowHeight * 0.12,
-                marginBottom: windowHeight * 0.015,
+                marginBottom: windowHeight * 0.01,
               }}
               source={require('../assets/images/alxlogo.png')}
             />
           </View>
 
           <Text style={styles.customWarningLabel}>{inputWarningMessage}</Text>
+          <Text style={styles.customWarningLabel}> {errorWarnMessage}</Text>
           <Input
             style={[
               styles.customInput,
