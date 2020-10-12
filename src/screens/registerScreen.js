@@ -124,7 +124,7 @@ export const RegisterScreen = ({navigation}) => {
           <Divider style={styles.customDivider} />
 
           <TouchableOpacity
-            style={{marginTop: windowHeight * 0.03}}
+            style={styles.customRaisedEl}
             onPress={navigateToLoginScreen}>
             <Text>Log in</Text>
           </TouchableOpacity>
@@ -160,5 +160,25 @@ const styles = StyleSheet.create({
     height: 0.5,
     width: '20%',
     marginVertical: 4,
+  },
+  customRaisedEl: {
+    width: '20%',
+    height: '5%',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 20,
+    borderRadius: 5,
+    alignSelf: 'center',
+    backgroundColor: '#F0F0F0',
+    shadowColor: '#fff',
+    shadowOffset: {
+      width: 0,
+      height: 12,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 6,
+
+    elevation: 24,
   },
 });
