@@ -1,4 +1,6 @@
 import React from 'react';
+import axios from 'axios';
+import {serverUrl, registerUserEndpoint} from '../api';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {
   StyleSheet,
@@ -13,17 +15,88 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {Layout, Icon, Input, Button, Divider} from '@ui-kitten/components';
 import LinearGradient from 'react-native-linear-gradient';
 
-const useInputState = (initialValue = '') => {
-  const [value, setValue] = React.useState(initialValue);
-  return {value, onChangeText: setValue};
-};
-
 export const RegisterScreen = ({navigation}) => {
   const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
 
-  const [value, setValue] = React.useState('');
+  const navigateToLoginScreen = () => {
+    navigation.navigate('Login');
+  };
+
+  const [inputWarningMessage, setInputWarningMessage] = React.useState('');
+  const [emailWarnMessage, setEmailWarnMessage] = React.useState('');
+
   const [secureTextEntry, setSecureTextEntry] = React.useState(true);
+
+  const useUsernameState = (initialValue = '') => {
+    const [username, setUsername] = React.useState(initialValue);
+    return {username, onChangeText: setUsername};
+  };
+  const useEmailState = (initialValue = '') => {
+    const [email, setEmail] = React.useState(initialValue);
+    return {email, onChangeText: setEmail};
+  };
+  const usePasswordState = (initialValue = '') => {
+    const [password, setPassword] = React.useState(initialValue);
+    return {password, onChangeText: setPassword};
+  };
+
+  const usernameInputState = useUsernameState();
+  const emailInputState = useEmailState();
+  const passwordInputState = usePasswordState();
+
+  const registerUser = () => {
+    // console.warn(
+    //   'Reg Screen Username: ==============',
+    //   usernameInputState.username,
+    // );
+
+    const renderInputWarnMessage = () => (
+      <Text>* All fields are required </Text>
+    );
+    const renderEmailWarnMessage = () => (
+      <Text>* Required: example@example.com </Text>
+    );
+    const renderEmptyValue = () => '';
+
+    if (
+      usernameInputState.username == '' ||
+      emailInputState.email == '' ||
+      passwordInputState.password == ''
+    ) {
+      setInputWarningMessage(renderInputWarnMessage);
+    } else {
+      let tester = /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-?\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
+      let valid = tester.test(emailInputState.email);
+
+      if (!valid) {
+        setEmailWarnMessage(renderEmailWarnMessage);
+      } else {
+        setInputWarningMessage(renderEmptyValue);
+        setEmailWarnMessage(renderEmptyValue);
+        let userRegData = {
+          username: usernameInputState.username,
+          email: emailInputState.email,
+          password: passwordInputState.password,
+        };
+        // console.warn('UserRegData========', userRegData);
+
+        axios
+          .post(registerUserEndpoint, userRegData, {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          })
+          .then(function (response) {
+            console.warn('Creating User Response: ==========', response);
+            navigateToLoginScreen();
+          })
+          .catch(function (error) {
+            console.warn(error);
+          });
+      }
+    }
+  };
 
   const toggleSecureEntry = () => {
     setSecureTextEntry(!secureTextEntry);
@@ -34,14 +107,6 @@ export const RegisterScreen = ({navigation}) => {
       <Icon {...props} name={secureTextEntry ? 'eye-off' : 'eye'} />
     </TouchableWithoutFeedback>
   );
-
-  const smallInputState = useInputState();
-  const mediumInputState = useInputState();
-  const largeInputState = useInputState();
-
-  const navigateToLoginScreen = () => {
-    navigation.navigate('Login');
-  };
 
   return (
     <KeyboardAwareScrollView resetScrollToCoords={{x: 0, y: 0}}>
@@ -60,6 +125,7 @@ export const RegisterScreen = ({navigation}) => {
             />
           </View>
 
+          <Text style={styles.customWarningLabel}>{inputWarningMessage}</Text>
           <Input
             style={[
               styles.customInput,
@@ -70,8 +136,10 @@ export const RegisterScreen = ({navigation}) => {
             ]}
             size="large"
             placeholder="Username"
-            {...largeInputState}
+            {...usernameInputState}
           />
+
+          <Text style={styles.customWarningLabel}>{emailWarnMessage}</Text>
           <Input
             style={[
               styles.customInput,
@@ -82,7 +150,7 @@ export const RegisterScreen = ({navigation}) => {
             ]}
             size="large"
             placeholder="Email"
-            {...largeInputState}
+            {...emailInputState}
           />
 
           <Input
@@ -90,15 +158,15 @@ export const RegisterScreen = ({navigation}) => {
               styles.customInput,
               {
                 marginHorizontal: windowWidth * 0.1,
+                marginTop: windowHeight * 0.02,
                 marginBottom: windowHeight * 0.05,
               },
             ]}
             size="large"
-            value={value}
             placeholder="Password"
             accessoryRight={renderIcon}
             secureTextEntry={secureTextEntry}
-            onChangeText={(nextValue) => setValue(nextValue)}
+            {...passwordInputState}
           />
 
           <LinearGradient
@@ -109,7 +177,7 @@ export const RegisterScreen = ({navigation}) => {
             <Button
               style={styles.customButton}
               size="large"
-              onPress={navigateToLoginScreen}>
+              onPress={registerUser}>
               Sign up
             </Button>
           </LinearGradient>
@@ -141,6 +209,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'transparent',
   },
+  customWarningLabel: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    width: '75%',
+    color: 'red',
+  },
   customInput: {
     borderRadius: 20,
   },
@@ -148,7 +223,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    width: '75%',
+    width: '55%',
   },
   customButton: {
     width: '75%',

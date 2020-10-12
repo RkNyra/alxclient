@@ -35,8 +35,6 @@ export const LoginScreen = ({navigation}) => {
     </TouchableWithoutFeedback>
   );
 
-  const smallInputState = useInputState();
-  const mediumInputState = useInputState();
   const largeInputState = useInputState();
 
   const navigateToHomeScreen = () => {
