@@ -59,7 +59,7 @@ export const LoginScreen = ({navigation}) => {
       <Text>* All fields are required </Text>
     );
     const renderEmailWarnMessage = () => (
-      <Text>* Required: example@example.com </Text>
+      <Text>* Required Email Format: example@example.com </Text>
     );
     const renderEmptyValue = () => '';
 
