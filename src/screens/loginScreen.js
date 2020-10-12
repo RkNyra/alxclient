@@ -101,7 +101,7 @@ export const LoginScreen = ({navigation}) => {
             }
           })
           .catch(function (error) {
-            console.warn(error.error);
+            console.warn('lognwarning===============', error);
           });
       }
     }

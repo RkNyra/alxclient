@@ -1,4 +1,6 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import axios from 'axios';
+import {jokesEndpoint} from '../api';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {
   StyleSheet,
@@ -19,6 +21,7 @@ import {
 const BackIcon = (props) => <Icon {...props} fill="#333" name="arrow-back" />;
 
 export const JokesScreen = ({navigation}) => {
+  const [jokesData, setJokesData] = React.useState('');
   const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
 
@@ -37,6 +40,23 @@ export const JokesScreen = ({navigation}) => {
     />
   );
 
+  useEffect(() => {
+    getJokesData();
+  }, []);
+
+  const getJokesData = () => {
+    axios
+      .get(jokesEndpoint)
+      .then(function (response) {
+        console.warn('Logging in Jokes Response: ==========', response);
+        console.warn('Logging in Jokes Response: ==========', response.data[0]);
+        setJokesData(response.data);
+      })
+      .catch(function (error) {
+        console.warn('warning================', error);
+      });
+  };
+
   return (
     <KeyboardAwareScrollView style={{backgroundColor: 'transparent'}}>
       <SafeAreaView style={{flex: 1}}>
@@ -50,27 +70,33 @@ export const JokesScreen = ({navigation}) => {
               backgroundColor: 'transparent',
             }}
           />
-
-          <View style={styles.jokesListView}>
-            <TouchableOpacity style={styles.jokesListInnerView}>
-              <Icon
-                style={styles.customIcon}
-                fill="red"
-                name="smiling-face-outline"
-              />
-              <View style={styles.jokesTextView}>
-                <Text style={styles.jokesTextTitle}>Type: General </Text>
-                <Text style={styles.jokesText}>
-                  I'm reading a book about anti-gravity...I'm reading a book
-                  about anti-gravity...I'm reading a book about
-                  anti-gravity...I'm reading a book about anti-gravity...
-                </Text>
-                <Text style={styles.jokesText}>
-                  It's impossible to put down
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </View>
+		<View style={{height: 50}}></View>
+          {jokesData.length != undefined && jokesData.length > 0 ? (
+            jokesData.map((joke) => {
+              return (
+                <View style={styles.jokesListView}>
+                  <TouchableOpacity style={styles.jokesListInnerView}>
+                    <Icon
+                      style={styles.customIcon}
+                      fill="red"
+                      name="smiling-face-outline"
+                    />
+                    <View style={styles.jokesTextView}>
+                      <Text style={styles.jokesTextTitle}>
+                        Type: {joke.type}{' '}
+                      </Text>
+                      <Text style={styles.jokesText}> {joke.setup} </Text>
+                      <Text style={styles.jokesText}> {joke.punchline} </Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              );
+            })
+          ) : (
+            <View style={styles.jokesListView}>
+              <Text> Loading...</Text>
+            </View>
+          )}
         </Layout>
       </SafeAreaView>
     </KeyboardAwareScrollView>
@@ -95,8 +121,6 @@ const styles = StyleSheet.create({
   jokesListView: {
     width: '90%',
     alignItems: 'center',
-    marginTop: 50,
-    marginBottom: 20,
     alignSelf: 'flex-start',
     marginLeft: 20,
   },
@@ -106,8 +130,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-	alignSelf: 'flex-start',
-	paddingVertical: 5,
+    alignSelf: 'flex-start',
+    paddingVertical: 5,
     marginTop: 30,
     borderRadius: 20,
     alignSelf: 'center',
@@ -131,8 +155,8 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
-	alignSelf: 'flex-start',
-	marginRight: 5,
+    alignSelf: 'flex-start',
+    marginRight: 5,
     borderRadius: 15,
     backgroundColor: 'white',
   },

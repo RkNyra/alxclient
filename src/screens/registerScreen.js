@@ -94,7 +94,7 @@ export const RegisterScreen = ({navigation}) => {
               // Error: email exists or field is required
               setErrorWarnMessage(<Text>{response.data.failed}</Text>);
             } else if (response.data.code == 200) {
-              // register successful, save data and proceed to log-in axewwn
+              // register successful proceed to log-in axewwn
               navigateToHomeScreen();
             }
           })
