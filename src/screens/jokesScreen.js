@@ -9,6 +9,7 @@ import {
   View,
   Text,
   useWindowDimensions,
+  ActivityIndicator,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {
@@ -48,8 +49,8 @@ export const JokesScreen = ({navigation}) => {
     axios
       .get(jokesEndpoint)
       .then(function (response) {
-        console.warn('Logging in Jokes Response: ==========', response);
-        console.warn('Logging in Jokes Response: ==========', response.data[0]);
+        // console.warn('Logging in Jokes Response: ==========', response);
+        // console.warn('Logging in Jokes Response: ==========', response.data[0]);
         setJokesData(response.data);
       })
       .catch(function (error) {
@@ -70,7 +71,7 @@ export const JokesScreen = ({navigation}) => {
               backgroundColor: 'transparent',
             }}
           />
-		<View style={{height: 50}}></View>
+          <View style={{height: 50}}></View>
           {jokesData.length != undefined && jokesData.length > 0 ? (
             jokesData.map((joke) => {
               return (
@@ -83,7 +84,7 @@ export const JokesScreen = ({navigation}) => {
                     />
                     <View style={styles.jokesTextView}>
                       <Text style={styles.jokesTextTitle}>
-                        Type: {joke.type}{' '}
+                        Type: {joke.type}
                       </Text>
                       <Text style={styles.jokesText}> {joke.setup} </Text>
                       <Text style={styles.jokesText}> {joke.punchline} </Text>
@@ -93,7 +94,8 @@ export const JokesScreen = ({navigation}) => {
               );
             })
           ) : (
-            <View style={styles.jokesListView}>
+            <View style={styles.loadingView}>
+              <ActivityIndicator size="large" color="##FF0000" />
               <Text> Loading...</Text>
             </View>
           )}
@@ -123,6 +125,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'flex-start',
     marginLeft: 20,
+  },
+  loadingView: {
+    width: '99%',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    alignSelf: 'flex-start',
+    paddingVertical: 5,
+    marginTop: 30,
+    borderRadius: 20,
+    alignSelf: 'center',
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 12,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 16,
+
+    elevation: 24,
   },
 
   jokesListInnerView: {

@@ -6,7 +6,7 @@ const serverUrl = axios.create({
 
 const registerUserEndpoint = 'https://af183086a13f.ngrok.io/api/register';
 
-const loginUserEndpoint = 'https://af183086a13f.ngrok.io/api/login';
+const loginUserEndpoint = 'https://3428b22f0f43.ngrok.io/api/login';
 
 const jokesEndpoint = 'https://official-joke-api.appspot.com/jokes/ten';
 

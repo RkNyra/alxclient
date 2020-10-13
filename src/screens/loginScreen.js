@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import {loginUserEndpoint} from '../api';
+import AsyncStorage from '@react-native-community/async-storage';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {
   StyleSheet,
@@ -15,11 +16,6 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {Layout, Icon, Input, Button, Divider} from '@ui-kitten/components';
 import LinearGradient from 'react-native-linear-gradient';
 
-const useInputState = (initialValue = '') => {
-  const [value, setValue] = React.useState(initialValue);
-  return {value, onChangeText: setValue};
-};
-
 export const LoginScreen = ({navigation}) => {
   const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
@@ -31,7 +27,6 @@ export const LoginScreen = ({navigation}) => {
   const [inputWarningMessage, setInputWarningMessage] = React.useState('');
   const [emailWarnMessage, setEmailWarnMessage] = React.useState('');
   const [errorWarnMessage, setErrorWarnMessage] = React.useState('');
-
 
   const [secureTextEntry, setSecureTextEntry] = React.useState(true);
 
@@ -90,14 +85,26 @@ export const LoginScreen = ({navigation}) => {
           })
           .then(function (response) {
             console.warn('Logging in User Response: ==========', response);
-            console.warn('Logging in User Response.DATA: ==========', response.data);
-            if(response.data.code==204) {
+            console.warn(
+              'Logging in User Response.DATA: ==========',
+              response.data,
+            );
+            if (response.data.code == 204) {
               // Error: passwords do not match
               setErrorWarnMessage(<Text>{response.data.error}</Text>);
-
-            } else if(response.data.code==200){
+            } else if (response.data.code == 200) {
               // login successful, save data and log in to home-screen
-              navigateToHomeScreen();
+              let currentUsername = response.data.results[0].username;
+              console.warn('current user username: ========', currentUsername);
+            		  
+
+			  storeUserUsername(currentUsername);
+			  
+              console.warn(
+                'login screen storing on local storage==========================',
+			  );
+			  
+
             }
           })
           .catch(function (error) {
@@ -105,6 +112,14 @@ export const LoginScreen = ({navigation}) => {
           });
       }
     }
+  };
+
+  const storeUserUsername = async (currentUsername) => {
+	try {
+	  await AsyncStorage.setItem('currentUser', currentUsername);
+	  console.warn(' finally ==================== ')
+	  navigateToHomeScreen();
+	} catch (e) {}
   };
 
   const renderIcon = (props) => (

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import AsyncStorage from '@react-native-community/async-storage';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {
   StyleSheet,
@@ -20,6 +21,26 @@ import {
 const BackIcon = (props) => <Icon {...props} fill="#FFF" name="arrow-back" />;
 
 export const HomeScreen = ({navigation}) => {
+  useEffect(() => {
+    getCurrentUserUsername();
+  }, []);
+
+  const getCurrentUserUsername = async () => {
+    try {
+      const currentUsername = await AsyncStorage.getItem('currentUser');
+      // console.warn('1st LOGGED IN AS: ====', currentUsername);
+      if (currentUsername !== null) {
+        // value previously stored
+        console.warn(' 2nd LOGGED IN AS: ====', currentUsername);
+        setUserName(currentUsername);
+      }
+    } catch (e) {
+      // error reading value
+    }
+  };
+
+  const [userName, setUserName] = React.useState('');
+
   const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
 
@@ -66,7 +87,7 @@ export const HomeScreen = ({navigation}) => {
                 backgroundColor: 'transparent',
               }}
             />
-            <Text style={styles.customGreeting}> Welcome Stella </Text>
+            <Text style={styles.customGreeting}> Welcome {userName} </Text>
           </ImageBackground>
 
           <View style={styles.homeListView}>
