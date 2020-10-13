@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import {registerUserEndpoint} from '../api';
+import {showMessage} from 'react-native-flash-message';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {
   StyleSheet,
@@ -81,7 +82,6 @@ export const RegisterScreen = ({navigation}) => {
           password: passwordInputState.password,
         };
         // console.warn('UserRegData========', userRegData);
-
         axios
           .post(registerUserEndpoint, userRegData, {
             headers: {
@@ -95,7 +95,15 @@ export const RegisterScreen = ({navigation}) => {
               setErrorWarnMessage(<Text>{response.data.failed}</Text>);
             } else if (response.data.code == 200) {
               // register successful proceed to log-in axewwn
-              navigateToHomeScreen();
+              showMessage({
+                icon: 'success',
+                message: 'Account Created! :) ',
+                description: 'Loading...',
+                type: 'success',
+              });
+              setTimeout(() => {
+                navigateToLoginScreen();
+              }, 2000);
             }
           })
           .catch(function (error) {

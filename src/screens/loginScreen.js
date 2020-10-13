@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import axios from 'axios';
 import {loginUserEndpoint} from '../api';
-import {showMessage, hideMessage} from 'react-native-flash-message';
+import {showMessage} from 'react-native-flash-message';
 import AsyncStorage from '@react-native-community/async-storage';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {
@@ -28,7 +28,7 @@ export const LoginScreen = ({navigation}) => {
       // console.warn('1st LOGGED IN AS: ====', currentUsername);
       if (currentUsername !== null) {
         // value previously stored
-		navigateToHomeScreen();
+        navigateToHomeScreen();
       }
     } catch (e) {
       // error reading value
@@ -118,20 +118,13 @@ export const LoginScreen = ({navigation}) => {
                 description: 'Loading...',
                 type: 'success',
               });
-
-              let currentUsername = response.data.results[0].username;
-              // console.warn('current user username: ========', currentUsername);
-
-              storeUserUsername(currentUsername);
-
-              //       console.warn(
-              //         'login screen storing on local storage==========================',
-              // );
+              setTimeout(() => {
+                let currentUsername = response.data.results[0].username;
+                storeUserUsername(currentUsername);
+              }, 2000);
             }
           })
-          .catch(function (error) {
-            // console.warn('lognwarning===============', error);
-          });
+          .catch(function (error) {});
       }
     }
   };

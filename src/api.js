@@ -4,7 +4,7 @@ const serverUrl = axios.create({
   baseURL: 'https://1f6984696e7f.ngrok.io/api',
 });
 
-const registerUserEndpoint = 'https://af183086a13f.ngrok.io/api/register';
+const registerUserEndpoint = 'https://3428b22f0f43.ngrok.io/api/register';
 
 const loginUserEndpoint = 'https://3428b22f0f43.ngrok.io/api/login';
 
