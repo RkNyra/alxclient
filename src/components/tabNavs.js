@@ -1,6 +1,6 @@
 import React from 'react';
 import {Icon} from '@ui-kitten/components';
-
+import AsyncStorage from '@react-native-community/async-storage';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {HomeScreen} from '../screens/homeScreen';
@@ -10,6 +10,16 @@ import {LoginScreen} from '../screens/loginScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+
+// clearing async/local storage
+const clearAsyncAndLogout = async () => {
+  try {
+    await AsyncStorage.removeItem('currentUser');
+  } catch (e) {
+    // remove error
+  }
+  // console.log('Done.');
+};
 
 const BottomTab = () => (
   <Tab.Navigator
@@ -69,6 +79,14 @@ const BottomTab = () => (
     <Tab.Screen
       name="Logout"
       component={LoginScreen}
+      listeners={({navigation, route}) => ({
+        tabPress: (e) => {
+          // Prevent default action
+          e.preventDefault();
+          clearAsyncAndLogout();
+          navigation.navigate('Login');
+        },
+      })}
       options={{
         tabBarLabel: '',
         tabBarIcon: () => (
@@ -79,6 +97,7 @@ const BottomTab = () => (
             name="log-out-outline"
           />
         ),
+        tabBarVisible: false,
       }}
     />
   </Tab.Navigator>

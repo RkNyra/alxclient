@@ -11,6 +11,7 @@ import {RegisterScreen} from '../screens/registerScreen';
 
 const Stack = createStackNavigator();
 
+
 const AppNavigator = () => (
   <Stack.Navigator headerMode="none">
     <Stack.Screen name="Login" component={LoginScreen} />

@@ -75,7 +75,7 @@ export const JokesScreen = ({navigation}) => {
           {jokesData.length != undefined && jokesData.length > 0 ? (
             jokesData.map((joke) => {
               return (
-                <View style={styles.jokesListView}>
+                <View style={styles.jokesListView} key={joke.id}>
                   <TouchableOpacity style={styles.jokesListInnerView}>
                     <Icon
                       style={styles.customIcon}
@@ -99,7 +99,7 @@ export const JokesScreen = ({navigation}) => {
             })
           ) : (
             <View style={styles.loadingView}>
-              <ActivityIndicator size="large" color="##FF0000" />
+              <ActivityIndicator size="large" color="#FF0000" />
               <Text style={{color: '#fff'}}> Loading...</Text>
             </View>
           )}
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   loadingView: {
-    width: '99%',
+    width: '55%',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
