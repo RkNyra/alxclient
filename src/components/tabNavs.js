@@ -15,6 +15,7 @@ const Tab = createBottomTabNavigator();
 const clearAsyncAndLogout = async () => {
   try {
     await AsyncStorage.removeItem('currentUser');
+    await AsyncStorage.clear();
   } catch (e) {
     // remove error
   }
@@ -84,7 +85,9 @@ const BottomTab = () => (
           // Prevent default action
           e.preventDefault();
           clearAsyncAndLogout();
-          navigation.push('Login');
+          setTimeout(() => {
+            navigation.navigate('Login');
+          }, 2000);
         },
       })}
       options={{
