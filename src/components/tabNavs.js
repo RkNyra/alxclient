@@ -84,7 +84,7 @@ const BottomTab = () => (
           // Prevent default action
           e.preventDefault();
           clearAsyncAndLogout();
-          navigation.navigate('Login');
+          navigation.push('Login');
         },
       })}
       options={{
