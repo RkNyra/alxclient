@@ -89,7 +89,7 @@ export const RegisterScreen = ({navigation}) => {
             },
           })
           .then(function (response) {
-            console.warn('Creating User Response: ==========', response);
+            // console.warn('Creating User Response: ==========', response);
             if (response.data.code == 400) {
               // Error: email exists or field is required
               setErrorWarnMessage(<Text>{response.data.failed}</Text>);

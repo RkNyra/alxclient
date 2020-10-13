@@ -54,7 +54,7 @@ export const JokesScreen = ({navigation}) => {
         setJokesData(response.data);
       })
       .catch(function (error) {
-        console.warn('warning================', error);
+        // console.warn('warning================', error);
       });
   };
 
@@ -71,7 +71,7 @@ export const JokesScreen = ({navigation}) => {
               backgroundColor: 'transparent',
             }}
           />
-          <View style={{height: 50}}></View>
+          <View style={{height: 70}}></View>
           {jokesData.length != undefined && jokesData.length > 0 ? (
             jokesData.map((joke) => {
               return (
@@ -85,9 +85,13 @@ export const JokesScreen = ({navigation}) => {
                     <View style={styles.jokesTextView}>
                       <Text style={styles.jokesTextTitle}>
                         Type: {joke.type}
+                        {'\n'}
                       </Text>
-                      <Text style={styles.jokesText}> {joke.setup} </Text>
-                      <Text style={styles.jokesText}> {joke.punchline} </Text>
+                      <Text style={styles.jokesText}>
+                        {joke.setup}
+                        {'\n'}
+                      </Text>
+                      <Text style={styles.jokesText}>{joke.punchline}</Text>
                     </View>
                   </TouchableOpacity>
                 </View>
@@ -96,7 +100,7 @@ export const JokesScreen = ({navigation}) => {
           ) : (
             <View style={styles.loadingView}>
               <ActivityIndicator size="large" color="##FF0000" />
-              <Text> Loading...</Text>
+              <Text style={{color: '#fff'}}> Loading...</Text>
             </View>
           )}
         </Layout>
@@ -129,14 +133,14 @@ const styles = StyleSheet.create({
   loadingView: {
     width: '99%',
     flexDirection: 'row',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     alignItems: 'center',
-    alignSelf: 'flex-start',
-    paddingVertical: 5,
-    marginTop: 30,
+    alignSelf: 'center',
+    paddingVertical: 10,
+    marginTop: '50%',
     borderRadius: 20,
     alignSelf: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#000',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -155,7 +159,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'flex-start',
     paddingVertical: 5,
-    marginTop: 30,
+    marginTop: 10,
     borderRadius: 20,
     alignSelf: 'center',
     backgroundColor: '#fff',

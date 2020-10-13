@@ -31,7 +31,7 @@ export const HomeScreen = ({navigation}) => {
       // console.warn('1st LOGGED IN AS: ====', currentUsername);
       if (currentUsername !== null) {
         // value previously stored
-        console.warn(' 2nd LOGGED IN AS: ====', currentUsername);
+        // console.warn(' 2nd LOGGED IN AS: ====', currentUsername);
         setUserName(currentUsername);
       }
     } catch (e) {
