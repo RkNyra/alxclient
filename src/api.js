@@ -1,13 +1,19 @@
-import axios from 'axios';
+// import axios from 'axios';
 
-const serverUrl = axios.create({
-  baseURL: 'https://1f6984696e7f.ngrok.io/api',
-});
+// const baseURL = axios.create({
+//   serverUrl: 'https://alxtest.truhdition.com',
+// });
 
-const registerUserEndpoint = 'https://3428b22f0f43.ngrok.io/api/register';
+// export const baseUrl = 'http://18.219.1.247:8080';
 
-const loginUserEndpoint = 'https://3428b22f0f43.ngrok.io/api/login';
+// const baseURL = {uri: 'https://alxtest.truhdition.com'};
+// const registerUserEndpoint = `${baseURL}/api/register`;
+// const loginUserEndpoint = `${baseURL}/api/login`;
 
+const registerUserEndpoint = 'https://alxtest.truhdition.com/api/register';
+const loginUserEndpoint = 'https://alxtest.truhdition.com/api/login';
+
+// 3rd Party APIs --Jokes and Kitsu
 const jokesEndpoint = 'https://official-joke-api.appspot.com/jokes/ten';
 
-export {serverUrl, registerUserEndpoint, loginUserEndpoint, jokesEndpoint};
+export {registerUserEndpoint, loginUserEndpoint, jokesEndpoint};

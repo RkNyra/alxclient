@@ -65,10 +65,7 @@ export const LoginScreen = ({navigation}) => {
   const passwordInputState = usePasswordState();
 
   const loginUser = () => {
-    // console.warn(
-    //   'Login Screen User Email: ==============',
-    //   emailInputState.email,
-    // );
+    // console.warn('Login Screen User Email: ==============',emailInputState.email);
 
     const renderInputWarnMessage = () => (
       <Text>* All fields are required </Text>
@@ -124,7 +121,9 @@ export const LoginScreen = ({navigation}) => {
               }, 2000);
             }
           })
-          .catch(function (error) {});
+          .catch(function (error) {
+            // console.warn('log in error=======', error);
+          });
       }
     }
   };

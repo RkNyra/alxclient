@@ -103,6 +103,7 @@ export const JokesScreen = ({navigation}) => {
               <Text style={{color: '#fff'}}> Loading...</Text>
             </View>
           )}
+          <View style={{height: 15}}></View>
         </Layout>
       </SafeAreaView>
     </KeyboardAwareScrollView>
