@@ -17,13 +17,16 @@ import {
   Icon,
   TopNavigation,
   TopNavigationAction,
+  Divider,
 } from '@ui-kitten/components';
 
 const BackIcon = (props) => <Icon {...props} fill="#333" name="arrow-back" />;
 
 export const KitsuScreen = ({navigation}) => {
   const [kitsuData, setKitsuData] = React.useState('');
-  const [kitsuPages, setKitsuPages] = React.useState('');
+  const [kitsuFirstPage, setKitsuFirstPage] = React.useState('');
+  const [kitsuNextPage, setKitsuNextPage] = React.useState('');
+  const [kitsuLastPage, setKitsuLastPage] = React.useState('');
 
   const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
@@ -54,12 +57,55 @@ export const KitsuScreen = ({navigation}) => {
         // console.warn('Kitsu Response=========', response.data.data[0]);
         // console.warn('Kitsu Response=========', typeof response.data.data);
         setKitsuData(response.data.data);
-        setKitsuPages(response.data.links);
-        // console.warn('Kitsu Pages=========', response.data.links);
-        // console.warn('Kitsu Pages=========', typeof response.data.links);
+        setKitsuFirstPage(response.data.links.first);
+        setKitsuNextPage(response.data.links.next);
+        setKitsuLastPage(response.data.links.last);
+
+        // console.warn('Kitsu FirstPg=========', response.data.links.first);
+        // console.warn('Kitsu NextPg=========', response.data.links.next);
+        // console.warn('Kitsu LastPg=========', response.data.links.last);
       })
       .catch(function (error) {
         // console.warn('warning================', error);
+      });
+  };
+
+  const getFirstPage = () => {
+    // console.warn('I AM HERE==============');
+    axios
+      .get(kitsuFirstPage)
+      .then(function (response) {
+        // console.warn('First Page Btn Click================',response.data.data);
+        setKitsuData(response.data.data);
+      })
+      .catch(function (error) {
+        // console.warn('warning first page====', error);
+      });
+  };
+
+  const getNextPage = () => {
+    // console.warn('I AM next ==============');
+    axios
+      .get(kitsuNextPage)
+      .then(function (response) {
+        // console.warn('Next Page Btn Click================', response.data.data);
+        setKitsuData(response.data.data);
+      })
+      .catch(function (error) {
+        // console.warn('warning next page====', error);
+      });
+  };
+
+  const getLastPage = () => {
+    // console.warn('I AM paging last page==============');
+    axios
+      .get(kitsuLastPage)
+      .then(function (response) {
+        // console.warn('Last Page Btn Click================', response.data.data);
+        setKitsuData(response.data.data);
+      })
+      .catch(function (error) {
+        // console.warn('warning last page====', error);
       });
   };
 
@@ -77,8 +123,9 @@ export const KitsuScreen = ({navigation}) => {
             }}
           />
           <View style={{height: 70}}></View>
+          <Divider style={styles.customDivider} />
 
-          {kitsuData.length != undefined && kitsuData.length > 0 ? (
+          {kitsuData.length != undefined && kitsuData.length > 0 ? ([
             kitsuData.map((kitsu) => {
               const posterImgSource = {
                 uri: `${kitsu.attributes.posterImage.tiny}`,
@@ -119,13 +166,46 @@ export const KitsuScreen = ({navigation}) => {
                   </TouchableOpacity>
                 </View>
               );
-            })
-          ) : (
+            }),
+            <View style={styles.customPaginator}>
+            <TouchableOpacity
+              style={styles.customPageinatorIcons}
+              onPress={getFirstPage}>
+              <Icon
+                style={styles.customIcon}
+                fill="orange"
+                name="arrowhead-left-outline"
+              />
+              <Text> First </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.customPageinatorIcons}
+              onPress={getNextPage}>
+              <Icon
+                style={styles.customIcon}
+                fill="green"
+                name="arrow-ios-forward-outline"
+              />
+              <Text> Next </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.customPageinatorIcons}
+              onPress={getLastPage}>
+              <Icon
+                style={styles.customIcon}
+                fill="red"
+                name="arrowhead-right-outline"
+              />
+              <Text> Last </Text>
+            </TouchableOpacity>
+          </View>
+          ]) : (
             <View style={styles.loadingView}>
               <ActivityIndicator size="large" color="#FF0000" />
               <Text style={{color: '#fff'}}> Loading...</Text>
             </View>
           )}
+          
         </Layout>
       </SafeAreaView>
     </KeyboardAwareScrollView>
@@ -146,6 +226,12 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     alignSelf: 'center',
     marginTop: 10,
+  },
+  customDivider: {
+    backgroundColor: '#000',
+    height: 1,
+    width: '100%',
+    marginVertical: 4,
   },
   kitsuListView: {
     width: '90%',
@@ -183,7 +269,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
     borderRadius: 20,
     alignSelf: 'center',
-    backgroundColor: '#c4c4c4',
+    backgroundColor: '#fff',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -226,8 +312,18 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     fontSize: 17,
   },
-  kitstuPageNavs: {
-    height: 25,
-    backgroundColor: 'black',
+  customPaginator: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '70%',
+    marginVertical: 10,
+    backgroundColor: 'transparent',
+  },
+  customPageinatorIcons: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: 7,
   },
 });

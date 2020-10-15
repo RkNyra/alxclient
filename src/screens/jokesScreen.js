@@ -19,6 +19,7 @@ import {
   Icon,
   TopNavigation,
   TopNavigationAction,
+  Divider,
 } from '@ui-kitten/components';
 
 const wait = (timeout) => {
@@ -92,7 +93,10 @@ export const JokesScreen = ({navigation}) => {
               backgroundColor: 'transparent',
             }}
           />
+
           <View style={{height: 70}}></View>
+          <Divider style={styles.customDivider} />
+
           {jokesData.length != undefined && jokesData.length > 0 ? (
             jokesData.map((joke) => {
               return (
@@ -121,7 +125,9 @@ export const JokesScreen = ({navigation}) => {
           ) : (
             <View style={styles.loadingView}>
               <ActivityIndicator size="large" color="#FF0000" />
-              <Text style={{color: '#fff'}}> Loading...</Text>
+              <Text style={{color: '#000', fontWeight: 'bold'}}>
+                {'  '}Loading...
+              </Text>
             </View>
           )}
           <View style={{height: 15}}></View>
@@ -153,6 +159,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 10,
   },
+  customDivider: {
+    backgroundColor: '#000',
+    height: 1,
+    width: '100%',
+    marginVertical: 4,
+  },
   jokesListView: {
     width: '90%',
     alignItems: 'center',
@@ -161,25 +173,23 @@ const styles = StyleSheet.create({
   },
   loadingView: {
     width: '55%',
-    // flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
-
+    marginTop: '55%',
     paddingVertical: 5,
-    // marginTop: '50%',
     borderRadius: 15,
-    backgroundColor: '#000',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 12,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 16,
+    backgroundColor: 'transparent',
+    // shadowColor: '#000',
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 12,
+    // },
+    // shadowOpacity: 0.5,
+    // shadowRadius: 16,
 
-    elevation: 24,
+    // elevation: 24,
   },
 
   jokesListInnerView: {
@@ -192,7 +202,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     borderRadius: 20,
     alignSelf: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#efefef',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -215,7 +225,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     marginRight: 5,
     borderRadius: 15,
-    backgroundColor: 'white',
+    backgroundColor: '#efefef',
   },
   jokesTextTitle: {
     marginLeft: 10,
