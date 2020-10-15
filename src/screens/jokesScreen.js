@@ -3,6 +3,8 @@ import axios from 'axios';
 import {jokesEndpoint} from '../api';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {
+  ScrollView,
+  RefreshControl,
   StyleSheet,
   TouchableOpacity,
   Image,
@@ -19,10 +21,24 @@ import {
   TopNavigationAction,
 } from '@ui-kitten/components';
 
+const wait = (timeout) => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, timeout);
+  });
+};
+
 const BackIcon = (props) => <Icon {...props} fill="#333" name="arrow-back" />;
 
 export const JokesScreen = ({navigation}) => {
   const [jokesData, setJokesData] = React.useState('');
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    getJokesData();
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
+
   const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
 
@@ -59,8 +75,13 @@ export const JokesScreen = ({navigation}) => {
   };
 
   return (
-    <KeyboardAwareScrollView style={{backgroundColor: 'transparent'}}>
-      <SafeAreaView style={{flex: 1}}>
+    // <KeyboardAwareScrollView style={{flex: 1, backgroundColor: 'transparent'}}>
+    <SafeAreaView>
+      <ScrollView
+        contentContainerStyle={styles.scrollView}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
         <Layout style={styles.customLayout}>
           <TopNavigation
             accessoryLeft={BackAction}
@@ -105,17 +126,24 @@ export const JokesScreen = ({navigation}) => {
           )}
           <View style={{height: 15}}></View>
         </Layout>
-      </SafeAreaView>
-    </KeyboardAwareScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  scrollView: {
+    flex: 1,
+    backgroundColor: 'transparent',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   customLayout: {
     flex: 1,
+    width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: 'transparent',
   },
   customProfPic: {
     width: 50,
@@ -133,14 +161,15 @@ const styles = StyleSheet.create({
   },
   loadingView: {
     width: '55%',
+    // flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
-    paddingVertical: 10,
-    marginTop: '50%',
-    borderRadius: 20,
-    alignSelf: 'center',
+
+    paddingVertical: 5,
+    // marginTop: '50%',
+    borderRadius: 15,
     backgroundColor: '#000',
     shadowColor: '#000',
     shadowOffset: {
