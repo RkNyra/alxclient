@@ -146,7 +146,7 @@ export const KitsuScreen = ({navigation}) => {
                     /> */}
                     <View style={styles.kitsuTextView}>
                       <Text style={styles.kitsuTextTitle}>
-                        Type: {kitsu.attributes.titles.en}
+                        Title: {kitsu.attributes.titles.en}
                         {'\n'}
                       </Text>
                       <Text style={styles.kitsuText}>
