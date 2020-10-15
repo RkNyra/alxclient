@@ -23,6 +23,7 @@ const BackIcon = (props) => <Icon {...props} fill="#333" name="arrow-back" />;
 
 export const KitsuScreen = ({navigation}) => {
   const [kitsuData, setKitsuData] = React.useState('');
+  const [kitsuPages, setKitsuPages] = React.useState('');
 
   const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
@@ -51,11 +52,14 @@ export const KitsuScreen = ({navigation}) => {
       .get(kitsuEndpoint)
       .then(function (response) {
         // console.warn('Kitsu Response=========', response.data.data[0]);
-        // console.warn('Kitsu Response=========', typeof(response.data.data));
+        // console.warn('Kitsu Response=========', typeof response.data.data);
         setKitsuData(response.data.data);
+        setKitsuPages(response.data.links);
+        // console.warn('Kitsu Pages=========', response.data.links);
+        // console.warn('Kitsu Pages=========', typeof response.data.links);
       })
       .catch(function (error) {
-        console.warn('warning================', error);
+        // console.warn('warning================', error);
       });
   };
 
@@ -191,12 +195,11 @@ const styles = StyleSheet.create({
     elevation: 24,
   },
   customPosterImg: {
-	width: '35%',
+    width: '35%',
     height: '100%',
     resizeMode: 'cover',
     borderRadius: 20,
     alignSelf: 'center',
-
   },
   customIcon: {
     width: 27,
@@ -222,5 +225,9 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginBottom: 5,
     fontSize: 17,
+  },
+  kitstuPageNavs: {
+    height: 25,
+    backgroundColor: 'black',
   },
 });
