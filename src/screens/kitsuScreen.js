@@ -1,4 +1,6 @@
 import React from 'react';
+import axios from 'axios';
+import {kitsuEndpoint} from '../api';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {
   StyleSheet,
@@ -19,6 +21,8 @@ import {
 const BackIcon = (props) => <Icon {...props} fill="#333" name="arrow-back" />;
 
 export const KitsuScreen = ({navigation}) => {
+  const [kitsuData, setKitsuData] = React.useState('');
+
   const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
 

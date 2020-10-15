@@ -14,6 +14,8 @@ const registerUserEndpoint = 'https://alxtest.truhdition.com/api/register';
 const loginUserEndpoint = 'https://alxtest.truhdition.com/api/login';
 
 // 3rd Party APIs --Jokes and Kitsu
-const jokesEndpoint = 'https://official-joke-api.appspot.com/jokes/ten';
+// const jokesEndpoint = 'https://official-joke-api.appspot.com/jokes/ten';
+const jokesEndpoint = 'https://alxtest.truhdition.com/api/getJokesData';
+const kitsuEndpoint = 'https://alxtest.truhdition.com/api/getKitsuData';
 
 export {registerUserEndpoint, loginUserEndpoint, jokesEndpoint};
