@@ -107,7 +107,7 @@ export const RegisterScreen = ({navigation}) => {
             }
           })
           .catch(function (error) {
-            console.warn(error);
+            // console.warn(error);
           });
       }
     }
