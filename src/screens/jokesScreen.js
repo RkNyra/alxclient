@@ -49,8 +49,8 @@ export const JokesScreen = ({navigation}) => {
     axios
       .get(jokesEndpoint)
       .then(function (response) {
-        // console.warn('Logging in Jokes Response: ==========', response);
-        // console.warn('Logging in Jokes Response: ==========', response.data[0]);
+        // console.warn('Logging Jokes Response: ==========', response);
+        // console.warn('Logging Jokes Response.DATA[0]: ==========', response.data[0]);
         setJokesData(response.data);
       })
       .catch(function (error) {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import axios from 'axios';
 import {kitsuEndpoint} from '../api';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -9,6 +9,7 @@ import {
   View,
   Text,
   useWindowDimensions,
+  ActivityIndicator,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {
@@ -41,6 +42,23 @@ export const KitsuScreen = ({navigation}) => {
     />
   );
 
+  useEffect(() => {
+    getKitsuData();
+  }, []);
+
+  const getKitsuData = () => {
+    axios
+      .get(kitsuEndpoint)
+      .then(function (response) {
+        // console.warn('Kitsu Response=========', response.data.data[0]);
+        // console.warn('Kitsu Response=========', typeof(response.data.data));
+        setKitsuData(response.data.data);
+      })
+      .catch(function (error) {
+        console.warn('warning================', error);
+      });
+  };
+
   return (
     <KeyboardAwareScrollView style={{backgroundColor: 'transparent'}}>
       <SafeAreaView style={{flex: 1}}>
@@ -54,24 +72,56 @@ export const KitsuScreen = ({navigation}) => {
               backgroundColor: 'transparent',
             }}
           />
+          <View style={{height: 70}}></View>
 
-          <View style={styles.kitsuListView}>
-            <TouchableOpacity style={styles.kitsuListInnerView}>
-              <Icon style={styles.customIcon} fill="blue" name="film-outline" />
-              <View style={styles.kitsuTextView}>
-                <Text style={styles.kitsuTextTitle}>Title </Text>
-                <Text style={styles.kitsuText}>Popularity rank: 10</Text>
-                <Text style={styles.kitsuText}>
-                  Check for other info to select
-                </Text>
-                <Text style={styles.kitsuText}>
-                  NOTE: insert anime poster-IMAGE [tiny-poster-IMAGE in place of
-                  icon-above if poster exists. if poster doesn't exist, icon
-                  remains.
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </View>
+          {kitsuData.length != undefined && kitsuData.length > 0 ? (
+            kitsuData.map((kitsu) => {
+              const posterImgSource = {
+                uri: `${kitsu.attributes.posterImage.tiny}`,
+              };
+
+              return (
+                <View style={styles.kitsuListView} key={kitsu.id}>
+                  <TouchableOpacity style={styles.kitsuListInnerView}>
+                    <Image
+                      style={styles.customPosterImg}
+                      source={posterImgSource}
+                    />
+                    {/* 
+                    <Icon
+                      style={styles.customIcon}
+                      fill="blue"
+                      name="film-outline"
+                    /> */}
+                    <View style={styles.kitsuTextView}>
+                      <Text style={styles.kitsuTextTitle}>
+                        Type: {kitsu.attributes.titles.en}
+                        {'\n'}
+                      </Text>
+                      <Text style={styles.kitsuText}>
+                        Popularity rank: {kitsu.attributes.popularityRank}
+                      </Text>
+                      <Text style={styles.kitsuText}>
+                        Ave. Rating: {kitsu.attributes.averageRating}
+                      </Text>
+                      <Text style={styles.kitsuText}>
+                        Age Rating: {kitsu.attributes.ageRating}
+                      </Text>
+                      <Text style={styles.kitsuText}>
+                        Age Rating Guide:
+                        {kitsu.attributes.ageRatingGuide}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              );
+            })
+          ) : (
+            <View style={styles.loadingView}>
+              <ActivityIndicator size="large" color="#FF0000" />
+              <Text style={{color: '#fff'}}> Loading...</Text>
+            </View>
+          )}
         </Layout>
       </SafeAreaView>
     </KeyboardAwareScrollView>
@@ -96,23 +146,20 @@ const styles = StyleSheet.create({
   kitsuListView: {
     width: '90%',
     alignItems: 'center',
-    marginTop: 50,
-    marginBottom: 20,
     alignSelf: 'flex-start',
     marginLeft: 20,
   },
-
-  kitsuListInnerView: {
-    width: '99%',
+  loadingView: {
+    width: '55%',
     flexDirection: 'row',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     alignItems: 'center',
-    alignSelf: 'flex-start',
-    paddingVertical: 5,
-    marginTop: 30,
+    alignSelf: 'center',
+    paddingVertical: 10,
+    marginTop: '50%',
     borderRadius: 20,
     alignSelf: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#000',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -122,6 +169,34 @@ const styles = StyleSheet.create({
     shadowRadius: 16,
 
     elevation: 24,
+  },
+  kitsuListInnerView: {
+    width: '99%',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    alignSelf: 'flex-start',
+    marginTop: 15,
+    borderRadius: 20,
+    alignSelf: 'center',
+    backgroundColor: '#c4c4c4',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 12,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 16,
+
+    elevation: 24,
+  },
+  customPosterImg: {
+	width: '35%',
+    height: '100%',
+    resizeMode: 'cover',
+    borderRadius: 20,
+    alignSelf: 'center',
+
   },
   customIcon: {
     width: 27,

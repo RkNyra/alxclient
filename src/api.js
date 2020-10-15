@@ -18,4 +18,4 @@ const loginUserEndpoint = 'https://alxtest.truhdition.com/api/login';
 const jokesEndpoint = 'https://alxtest.truhdition.com/api/getJokesData';
 const kitsuEndpoint = 'https://alxtest.truhdition.com/api/getKitsuData';
 
-export {registerUserEndpoint, loginUserEndpoint, jokesEndpoint};
+export {registerUserEndpoint, loginUserEndpoint, jokesEndpoint,kitsuEndpoint};
