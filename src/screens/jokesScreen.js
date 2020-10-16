@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import axios from 'axios';
+import AsyncStorage from '@react-native-community/async-storage';
 import {jokesEndpoint} from '../api';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {
   ScrollView,
   RefreshControl,
@@ -31,6 +31,7 @@ const wait = (timeout) => {
 const BackIcon = (props) => <Icon {...props} fill="#333" name="arrow-back" />;
 
 export const JokesScreen = ({navigation}) => {
+  const [userJwt, setUserJwt] = React.useState('');
   const [jokesData, setJokesData] = React.useState('');
   const [refreshing, setRefreshing] = React.useState(false);
 
@@ -60,14 +61,31 @@ export const JokesScreen = ({navigation}) => {
 
   useEffect(() => {
     getJokesData();
+    getCurrentUserUserJwt();
+    // console.warn('at jokes screen');
   }, []);
+
+  const getCurrentUserUserJwt = async () => {
+    try {
+      const currentUserJwt = await AsyncStorage.getItem('currentUserJwtoken');
+
+      if (currentUserJwt !== null) {
+        setUserJwt(currentUserJwt);
+      }
+    } catch (e) {
+      // error reading value
+      console.warn('error at getting jwtoken: ====', e);
+    }
+  };
 
   const getJokesData = () => {
     axios
-      .get(jokesEndpoint)
+      .get(jokesEndpoint, {
+        headers: {
+          Authorization: 'Token ' + userJwt,
+        },
+      })
       .then(function (response) {
-        // console.warn('Logging Jokes Response: ==========', response);
-        // console.warn('Logging Jokes Response.DATA[0]: ==========', response.data[0]);
         setJokesData(response.data);
       })
       .catch(function (error) {

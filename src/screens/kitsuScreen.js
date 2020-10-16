@@ -51,7 +51,7 @@ export const KitsuScreen = ({navigation}) => {
   useEffect(() => {
     getKitsuData();
     getCurrentUserUserJwt();
-    console.warn('at kitsu screen');
+    // console.warn('at kitsu screen');
   }, []);
 
   const getCurrentUserUserJwt = async () => {
@@ -59,7 +59,6 @@ export const KitsuScreen = ({navigation}) => {
       const currentUserJwt = await AsyncStorage.getItem('currentUserJwtoken');
       // console.warn('my first token: ====', currentUserJwt);
       if (currentUserJwt !== null) {
-        // value previously stored
         // console.warn('my token 2ndlog: ====', currentUserJwt);
         setUserJwt(currentUserJwt);
       }
