@@ -62,7 +62,7 @@ export const JokesScreen = ({navigation}) => {
   useEffect(() => {
     getJokesData();
     getCurrentUserUserJwt();
-    // console.warn('at jokes screen');
+    console.warn('at jokes screen');
   }, []);
 
   const getCurrentUserUserJwt = async () => {

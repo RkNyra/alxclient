@@ -121,10 +121,10 @@ export const LoginScreen = ({navigation}) => {
                 let currentUserJwt = response.data.accessjwtToken;
                 storeUserUsername(currentUsername);
                 storeUserUserJwt(currentUserJwt);
-                // console.warn(
-                //   'my token at login==================',
-                //   currentUserJwt,
-                // );
+                console.warn(
+                  'my token at login==================',
+                  currentUserJwt,
+                );
               }, 2000);
             }
           })
