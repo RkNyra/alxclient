@@ -65,7 +65,7 @@ export const KitsuScreen = ({navigation}) => {
       }
     } catch (e) {
       // error reading value
-      // console.warn('my token 2ndlog: ====', e);
+      // console.warn('error at getting jwtoken: ====', e);
     }
   };
 
@@ -73,7 +73,7 @@ export const KitsuScreen = ({navigation}) => {
     axios
       .get(kitsuEndpoint, {
         headers: {
-          "Authorization": 'Token ' + userJwt,
+          Authorization: 'Token ' + userJwt,
         },
       })
       .then(function (response) {
@@ -113,6 +113,7 @@ export const KitsuScreen = ({navigation}) => {
       .then(function (response) {
         // console.warn('Next Page Btn Click================', response.data.data);
         setKitsuData(response.data.data);
+        setKitsuNextPage(response.data.links.next);
       })
       .catch(function (error) {
         // console.warn('warning next page====', error);
