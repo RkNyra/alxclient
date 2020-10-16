@@ -22,6 +22,7 @@ export const LoginScreen = ({navigation}) => {
     getCurrentUserUsername();
   }, []);
 
+  // used to navigate user to log in screen if they had already logged in before and left the app without logging out
   const getCurrentUserUsername = async () => {
     try {
       const currentUsername = await AsyncStorage.getItem('currentUser');
@@ -117,12 +118,18 @@ export const LoginScreen = ({navigation}) => {
               });
               setTimeout(() => {
                 let currentUsername = response.data.results[0].username;
+                let currentUserJwt = response.data.accessjwtToken;
                 storeUserUsername(currentUsername);
+                storeUserUserJwt(currentUserJwt);
+                console.warn(
+                  'my token at login==================',
+                  currentUserJwt,
+                );
               }, 2000);
             }
           })
           .catch(function (error) {
-            // console.warn('log in error=======', error);
+            console.warn('log in error=======', error);
           });
       }
     }
@@ -133,6 +140,11 @@ export const LoginScreen = ({navigation}) => {
       await AsyncStorage.setItem('currentUser', currentUsername);
       // console.warn(' finally ==================== ');
       navigateToHomeScreen();
+    } catch (e) {}
+  };
+  const storeUserUserJwt = async (currentUserJwt) => {
+    try {
+      await AsyncStorage.setItem('currentUserJwtoken', currentUserJwt);
     } catch (e) {}
   };
 

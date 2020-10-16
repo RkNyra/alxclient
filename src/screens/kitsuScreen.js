@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import axios from 'axios';
 import {kitsuEndpoint} from '../api';
+import AsyncStorage from '@react-native-community/async-storage';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {
   StyleSheet,
@@ -23,6 +24,7 @@ import {
 const BackIcon = (props) => <Icon {...props} fill="#333" name="arrow-back" />;
 
 export const KitsuScreen = ({navigation}) => {
+  const [userJwt, setUserJwt] = React.useState('');
   const [kitsuData, setKitsuData] = React.useState('');
   const [kitsuFirstPage, setKitsuFirstPage] = React.useState('');
   const [kitsuNextPage, setKitsuNextPage] = React.useState('');
@@ -48,11 +50,32 @@ export const KitsuScreen = ({navigation}) => {
 
   useEffect(() => {
     getKitsuData();
+    getCurrentUserUserJwt();
+    console.warn('at kitsu screen');
   }, []);
+
+  const getCurrentUserUserJwt = async () => {
+    try {
+      const currentUserJwt = await AsyncStorage.getItem('currentUserJwtoken');
+      // console.warn('my first token: ====', currentUserJwt);
+      if (currentUserJwt !== null) {
+        // value previously stored
+        // console.warn('my token 2ndlog: ====', currentUserJwt);
+        setUserJwt(currentUserJwt);
+      }
+    } catch (e) {
+      // error reading value
+      // console.warn('my token 2ndlog: ====', e);
+    }
+  };
 
   const getKitsuData = () => {
     axios
-      .get(kitsuEndpoint)
+      .get(kitsuEndpoint, {
+        headers: {
+          "Authorization": 'Token ' + userJwt,
+        },
+      })
       .then(function (response) {
         // console.warn('Kitsu Response=========', response.data.data[0]);
         // console.warn('Kitsu Response=========', typeof response.data.data);
@@ -125,87 +148,88 @@ export const KitsuScreen = ({navigation}) => {
           <View style={{height: 70}}></View>
           <Divider style={styles.customDivider} />
 
-          {kitsuData.length != undefined && kitsuData.length > 0 ? ([
-            kitsuData.map((kitsu) => {
-              const posterImgSource = {
-                uri: `${kitsu.attributes.posterImage.tiny}`,
-              };
+          {kitsuData.length != undefined && kitsuData.length > 0 ? (
+            [
+              kitsuData.map((kitsu) => {
+                const posterImgSource = {
+                  uri: `${kitsu.attributes.posterImage.tiny}`,
+                };
 
-              return (
-                <View style={styles.kitsuListView} key={kitsu.id}>
-                  <TouchableOpacity style={styles.kitsuListInnerView}>
-                    <Image
-                      style={styles.customPosterImg}
-                      source={posterImgSource}
-                    />
-                    {/* 
+                return (
+                  <View style={styles.kitsuListView} key={kitsu.id}>
+                    <TouchableOpacity style={styles.kitsuListInnerView}>
+                      <Image
+                        style={styles.customPosterImg}
+                        source={posterImgSource}
+                      />
+                      {/* 
                     <Icon
                       style={styles.customIcon}
                       fill="blue"
                       name="film-outline"
                     /> */}
-                    <View style={styles.kitsuTextView}>
-                      <Text style={styles.kitsuTextTitle}>
-                        Title: {kitsu.attributes.titles.en}
-                        {'\n'}
-                      </Text>
-                      <Text style={styles.kitsuText}>
-                        Popularity rank: {kitsu.attributes.popularityRank}
-                      </Text>
-                      <Text style={styles.kitsuText}>
-                        Ave. Rating: {kitsu.attributes.averageRating}
-                      </Text>
-                      <Text style={styles.kitsuText}>
-                        Age Rating: {kitsu.attributes.ageRating}
-                      </Text>
-                      <Text style={styles.kitsuText}>
-                        Age Rating Guide:
-                        {kitsu.attributes.ageRatingGuide}
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              );
-            }),
-            <View style={styles.customPaginator}>
-            <TouchableOpacity
-              style={styles.customPageinatorIcons}
-              onPress={getFirstPage}>
-              <Icon
-                style={styles.customIcon}
-                fill="orange"
-                name="arrowhead-left-outline"
-              />
-              <Text> First </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.customPageinatorIcons}
-              onPress={getNextPage}>
-              <Icon
-                style={styles.customIcon}
-                fill="green"
-                name="arrow-ios-forward-outline"
-              />
-              <Text> Next </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.customPageinatorIcons}
-              onPress={getLastPage}>
-              <Icon
-                style={styles.customIcon}
-                fill="red"
-                name="arrowhead-right-outline"
-              />
-              <Text> Last </Text>
-            </TouchableOpacity>
-          </View>
-          ]) : (
+                      <View style={styles.kitsuTextView}>
+                        <Text style={styles.kitsuTextTitle}>
+                          Title: {kitsu.attributes.titles.en}
+                          {'\n'}
+                        </Text>
+                        <Text style={styles.kitsuText}>
+                          Popularity rank: {kitsu.attributes.popularityRank}
+                        </Text>
+                        <Text style={styles.kitsuText}>
+                          Ave. Rating: {kitsu.attributes.averageRating}
+                        </Text>
+                        <Text style={styles.kitsuText}>
+                          Age Rating: {kitsu.attributes.ageRating}
+                        </Text>
+                        <Text style={styles.kitsuText}>
+                          Age Rating Guide:
+                          {kitsu.attributes.ageRatingGuide}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                );
+              }),
+              <View style={styles.customPaginator}>
+                <TouchableOpacity
+                  style={styles.customPageinatorIcons}
+                  onPress={getFirstPage}>
+                  <Icon
+                    style={styles.customIcon}
+                    fill="orange"
+                    name="arrowhead-left-outline"
+                  />
+                  <Text> First </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.customPageinatorIcons}
+                  onPress={getNextPage}>
+                  <Icon
+                    style={styles.customIcon}
+                    fill="green"
+                    name="arrow-ios-forward-outline"
+                  />
+                  <Text> Next </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.customPageinatorIcons}
+                  onPress={getLastPage}>
+                  <Icon
+                    style={styles.customIcon}
+                    fill="red"
+                    name="arrowhead-right-outline"
+                  />
+                  <Text> Last </Text>
+                </TouchableOpacity>
+              </View>,
+            ]
+          ) : (
             <View style={styles.loadingView}>
               <ActivityIndicator size="large" color="#FF0000" />
               <Text style={{color: '#fff'}}> Loading...</Text>
             </View>
           )}
-          
         </Layout>
       </SafeAreaView>
     </KeyboardAwareScrollView>
