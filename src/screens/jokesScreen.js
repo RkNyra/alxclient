@@ -31,7 +31,7 @@ const wait = (timeout) => {
 const BackIcon = (props) => <Icon {...props} fill="#333" name="arrow-back" />;
 
 export const JokesScreen = ({navigation}) => {
-  const [userJwt, setUserJwt] = React.useState('');
+  // const [userJwt, setUserJwt] = React.useState('');
   const [jokesData, setJokesData] = React.useState('');
   const [refreshing, setRefreshing] = React.useState(false);
 
@@ -60,17 +60,20 @@ export const JokesScreen = ({navigation}) => {
   );
 
   useEffect(() => {
-    getJokesData();
     getCurrentUserUserJwt();
-    console.warn('at jokes screen');
+    console.warn('at jokes screen===');
   }, []);
 
   const getCurrentUserUserJwt = async () => {
+    console.warn('my first token: ====');
     try {
       const currentUserJwt = await AsyncStorage.getItem('currentUserJwtoken');
+      console.warn('my first token: ====', currentUserJwt);
 
       if (currentUserJwt !== null) {
-        setUserJwt(currentUserJwt);
+        console.warn('my first token if not null: ====', currentUserJwt);
+        getJokesData(currentUserJwt);
+        // setUserJwt(currentUserJwt);
       }
     } catch (e) {
       // error reading value
@@ -78,11 +81,11 @@ export const JokesScreen = ({navigation}) => {
     }
   };
 
-  const getJokesData = () => {
+  const getJokesData = (currentUserJwt) => {
     axios
       .get(jokesEndpoint, {
         headers: {
-          Authorization: 'Token ' + userJwt,
+          Authorization: 'Token ' + currentUserJwt,
         },
       })
       .then(function (response) {

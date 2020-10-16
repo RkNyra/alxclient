@@ -61,3 +61,8 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
+
+# private files
+.env
+my-upload-key.keystore
+api.js

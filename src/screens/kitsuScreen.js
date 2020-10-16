@@ -24,7 +24,7 @@ import {
 const BackIcon = (props) => <Icon {...props} fill="#333" name="arrow-back" />;
 
 export const KitsuScreen = ({navigation}) => {
-  const [userJwt, setUserJwt] = React.useState('');
+  // const [userJwt, setUserJwt] = React.useState('');
   const [kitsuData, setKitsuData] = React.useState('');
   const [kitsuFirstPage, setKitsuFirstPage] = React.useState('');
   const [kitsuNextPage, setKitsuNextPage] = React.useState('');
@@ -49,7 +49,6 @@ export const KitsuScreen = ({navigation}) => {
   );
 
   useEffect(() => {
-    getKitsuData();
     getCurrentUserUserJwt();
     console.warn('at kitsu screen');
   }, []);
@@ -57,10 +56,11 @@ export const KitsuScreen = ({navigation}) => {
   const getCurrentUserUserJwt = async () => {
     try {
       const currentUserJwt = await AsyncStorage.getItem('currentUserJwtoken');
-      // console.warn('my first token: ====', currentUserJwt);
       if (currentUserJwt !== null) {
         // console.warn('my token 2ndlog: ====', currentUserJwt);
-        setUserJwt(currentUserJwt);
+        getKitsuData(currentUserJwt);
+
+        // setUserJwt(currentUserJwt);
       }
     } catch (e) {
       // error reading value
@@ -68,11 +68,11 @@ export const KitsuScreen = ({navigation}) => {
     }
   };
 
-  const getKitsuData = () => {
+  const getKitsuData = (currentUserJwt) => {
     axios
       .get(kitsuEndpoint, {
         headers: {
-          Authorization: 'Token ' + userJwt,
+          Authorization: 'Token ' + currentUserJwt,
         },
       })
       .then(function (response) {
