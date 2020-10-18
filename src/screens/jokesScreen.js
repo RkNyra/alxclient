@@ -37,7 +37,7 @@ export const JokesScreen = ({navigation}) => {
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    getJokesData();
+    getCurrentUserUserJwt();
     wait(2000).then(() => setRefreshing(false));
   }, []);
 
@@ -61,17 +61,17 @@ export const JokesScreen = ({navigation}) => {
 
   useEffect(() => {
     getCurrentUserUserJwt();
-    console.warn('at jokes screen===');
+    // console.warn('at jokes screen===');
   }, []);
 
   const getCurrentUserUserJwt = async () => {
-    console.warn('my first token: ====');
+    // console.warn('my first token: ====');
     try {
       const currentUserJwt = await AsyncStorage.getItem('currentUserJwtoken');
-      console.warn('my first token: ====', currentUserJwt);
+      // console.warn('my first token: ====', currentUserJwt);
 
       if (currentUserJwt !== null) {
-        console.warn('my first token if not null: ====', currentUserJwt);
+        // console.warn('my first token if not null: ====', currentUserJwt);
         getJokesData(currentUserJwt);
         // setUserJwt(currentUserJwt);
       }

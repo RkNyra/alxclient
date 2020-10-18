@@ -50,7 +50,7 @@ export const KitsuScreen = ({navigation}) => {
 
   useEffect(() => {
     getCurrentUserUserJwt();
-    console.warn('at kitsu screen');
+    // console.warn('at kitsu screen');
   }, []);
 
   const getCurrentUserUserJwt = async () => {
